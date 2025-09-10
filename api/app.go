@@ -3,6 +3,7 @@ package api
 import (
 	"preselect/business"
 	"preselect/data"
+	"strings"
 )
 
 // Config holds application configuration options.
@@ -18,7 +19,7 @@ type App struct {
 
 // New creates a new App instance.
 func New(cfg Config) *App {
-	source := data.NewLoader()
+	source := data.NewLoader(strings.NewReader(""), nil)
 	return &App{
 		scanner: business.NewScanner(source),
 		cfg:     cfg,
