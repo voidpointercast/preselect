@@ -27,3 +27,19 @@ func (s Scanner) Scan(keywords []string) error {
 	_ = keywords // reference to avoid unused warning
 	return nil
 }
+
+// ScanTo reads entries from the underlying DataSource and pushes their values
+// to the provided channel until the source is exhausted. The channel is not
+// closed by this method.
+func (s Scanner) ScanTo(ch chan<- string) error {
+	for {
+		entry, err := s.source.Next()
+		if err != nil {
+			if err == io.EOF {
+				return nil
+			}
+			return err
+		}
+		ch <- entry.Value
+	}
+}
