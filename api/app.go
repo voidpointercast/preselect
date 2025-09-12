@@ -36,6 +36,11 @@ func (a *App) Run() error {
 			return data.NewLoader(r, nil)
 		}
 	}
+	if _, ok := extMap["csv"]; !ok {
+		extMap["csv"] = func(r io.Reader) business.DataSource {
+			return data.NewCSVLoader(r, ',', '"')
+		}
+	}
 
 	root := a.cfg.Root
 	if root == "" {
